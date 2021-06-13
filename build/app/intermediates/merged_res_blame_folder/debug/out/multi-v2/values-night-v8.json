@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "/home/otavio/Área de Trabalho/expenses/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values-night-v8/values-night-v8.xml",
+            "outputFile": "/home/otavio/Área de Trabalho/expensesMobile/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values-night-v8/values-night-v8.xml",
             "map": [
                 {
-                    "source": "/home/otavio/Área de Trabalho/expenses/android/app/src/main/res/values-night/styles.xml",
+                    "source": "/home/otavio/Área de Trabalho/expensesMobile/android/app/src/main/res/values-night/styles.xml",
                     "from": {
                         "startLines": "3,14",
                         "startColumns": "4,4",
