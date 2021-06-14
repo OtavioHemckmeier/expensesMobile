@@ -1,3 +1,4 @@
+import 'package:expenses/components/chart.dart';
 import 'package:expenses/components/transaction_form.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
@@ -21,20 +22,65 @@ class ExpensesApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Transaction> _transaction = [
-    // Transaction(
-    //     id: 't1', title: 'Novo tenis', value: 310.55, date: DateTime.now()),
-    // Transaction(
-    //     id: 't1', title: 'Novo tenis', value: 310.55, date: DateTime.now()),
-    // Transaction(
-    //     id: 't1', title: 'Novo tenis', value: 310.55, date: DateTime.now()),
+  final List<Transaction> _transactions = [
+    Transaction(
+      id: 't1',
+      title: 'Novo tenis',
+      value: 1,
+      date: DateTime.now(),
+    ),Transaction(
+      id: 't1',
+      title: 'Novo tenis',
+      value: 1,
+      date: DateTime.now(),
+    ),Transaction(
+      id: 't1',
+      title: 'Novo tenis',
+      value: 1,
+      date: DateTime.now(),
+    ),Transaction(
+      id: 't1',
+      title: 'Novo tenis',
+      value: 1,
+      date: DateTime.now(),
+    ),Transaction(
+      id: 't1',
+      title: 'Novo tenis',
+      value: 1,
+      date: DateTime.now(),
+    ),Transaction(
+      id: 't1',
+      title: 'Novo tenis',
+      value: 1,
+      date: DateTime.now(),
+    ),Transaction(
+      id: 't1',
+      title: 'Novo tenis',
+      value: 1,
+      date: DateTime.now(),
+    ),Transaction(
+      id: 't1',
+      title: 'Novo tenis',
+      value: 1,
+      date: DateTime.now(),
+    ),Transaction(
+      id: 't1',
+      title: 'Novo tenis',
+      value: 1,
+      date: DateTime.now(),
+    ),
   ];
+
+  List<Transaction> get _recentTransactions {
+    return _transactions.where((element) {
+      return element.date.isAfter(DateTime.now().subtract(Duration(days: 7)));
+    }).toList();
+  }
 
   _addTransaction(String title, double value) {
     final newTransaction = Transaction(
@@ -45,18 +91,18 @@ class _MyHomePageState extends State<MyHomePage> {
     );
 
     setState(() {
-      _transaction.add(newTransaction);
+      _transactions.add(newTransaction);
     });
 
     Navigator.of(context).pop();
   }
+
   _openTransactionFormModal(BuildContext context) {
     showModalBottomSheet(
         context: context,
         builder: (_) {
           return TransactionForm(_addTransaction);
-        }
-    );
+        });
   }
 
   @override
@@ -65,28 +111,24 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text('Despesas pessoais'),
         actions: [
-          IconButton(icon: Icon(Icons.add_circle_outlined), onPressed: () => _openTransactionFormModal(context))
+          IconButton(
+              icon: Icon(Icons.add_circle_outlined),
+              onPressed: () => _openTransactionFormModal(context))
         ],
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-              width: double.infinity,
-              child: Card(
-                color: Colors.blue,
-                child: Text('Gráfico'),
-                elevation: 5,
-              ),
-            ),
-            TransactionList(_transaction),
+            Chart(_recentTransactions),
+            TransactionList(_transactions),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: IconButton(icon: Icon(Icons.add_circle_outlined), onPressed: () => _openTransactionFormModal(context))
-      ),
+          child: IconButton(
+              icon: Icon(Icons.add_circle_outlined),
+              onPressed: () => _openTransactionFormModal(context))),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
