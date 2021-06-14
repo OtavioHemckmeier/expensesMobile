@@ -1,16 +1,19 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import '../Tansaction.dart';
 import 'package:intl/intl.dart';
 
 class TransactionList extends StatelessWidget {
   final List<Transaction> transactions;
+  final void Function(String) deleteTransaction;
 
-  TransactionList(this.transactions);
+  TransactionList(this.transactions, this.deleteTransaction);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 300,
+      height: 500,
       child: transactions.isEmpty
           ? Column(
               children: [
@@ -21,7 +24,7 @@ class TransactionList extends StatelessWidget {
                   height: 20,
                 ),
                 Container(
-                  height: 200,
+                  height: 250,
                   child: Image.asset(
                     'assets/images/waiting.png',
                     fit: BoxFit.cover,
@@ -36,10 +39,7 @@ class TransactionList extends StatelessWidget {
 
                 return Card(
                   elevation: 5,
-                  margin: EdgeInsets.symmetric(
-                    vertical: 8,
-                    horizontal: 5
-                  ),
+                  margin: EdgeInsets.symmetric(vertical: 8, horizontal: 5),
                   child: ListTile(
                     leading: CircleAvatar(
                       radius: 30,
@@ -54,12 +54,17 @@ class TransactionList extends StatelessWidget {
                     ),
                     title: Text(
                       tr.title,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold
-                      ),
+                      style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    subtitle: Text(
-                      DateFormat('d MMM y').format(tr.date)
+                    subtitle: Text(DateFormat('d MMM y').format(tr.date)),
+                    trailing: IconButton(
+                      icon: Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                      ),
+                      onPressed: () => {
+                        deleteTransaction(tr.id)
+                      },
                     ),
                     // trailing: ,
                   ),
