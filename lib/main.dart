@@ -5,7 +5,6 @@ import 'dart:math';
 import './components/transaction_list.dart';
 import './components/transaction_form.dart';
 import 'Tansaction.dart';
-import 'package:intl/intl.dart';
 
 main() => runApp(ExpensesApp());
 
@@ -29,6 +28,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> _transactions = [];
+  bool _showChat = false;
 
   List<Transaction> get _recentTransactions {
     return _transactions.where((element) {
@@ -51,7 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.of(context).pop();
   }
 
-  _deleteTransaction(String id){
+  _deleteTransaction(String id) {
     setState(() {
       _transactions.removeWhere((tr) => tr.id == id);
     });
@@ -68,21 +68,57 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Despesas pessoais'),
-        actions: [
+    final mediaQuery = MediaQuery.of(context);
+    bool isLandscape =
+        mediaQuery.orientation == Orientation.landscape;
+    final appBar = AppBar(
+      title: Text('Despesas pessoais'),
+      actions: [
+        if (isLandscape)
           IconButton(
-              icon: Icon(Icons.add_circle_outlined),
-              onPressed: () => _openTransactionFormModal(context))
-        ],
-      ),
+            icon: Icon(_showChat ? Icons.show_chart : Icons.list),
+            onPressed: () {
+              setState(() {
+                _showChat = !_showChat;
+              });
+            },
+          ),
+        IconButton(
+          icon: Icon(Icons.add_circle_outlined),
+          onPressed: () => _openTransactionFormModal(context),
+        ),
+      ],
+    );
+
+    final avalilabelHeigth = mediaQuery.size.height -
+        appBar.preferredSize.height -
+        mediaQuery.padding.top;
+    return Scaffold(
+      appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Chart(_recentTransactions),
-            TransactionList(_transactions, _deleteTransaction),
+            if (isLandscape)
+              _showChat
+                  ? Container(
+                      height: avalilabelHeigth * 0.5,
+                      child: Chart(_recentTransactions),
+                    )
+                  : Container(
+                      height: avalilabelHeigth * 0.5,
+                      child: TransactionList(_transactions, _deleteTransaction),
+                    ),
+            if (!isLandscape)
+              Container(
+                height: avalilabelHeigth * 0.3,
+                child: Chart(_recentTransactions),
+              ),
+            if (!isLandscape)
+              Container(
+                height: avalilabelHeigth * 0.7,
+                child: TransactionList(_transactions, _deleteTransaction),
+              )
           ],
         ),
       ),
@@ -90,7 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: IconButton(
               icon: Icon(Icons.add_circle_outlined),
               onPressed: () => _openTransactionFormModal(context))),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
